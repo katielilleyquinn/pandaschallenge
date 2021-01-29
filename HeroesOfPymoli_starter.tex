@@ -1,0 +1,1024 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{HeroesOfPymoli\_starter}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{note}{%
+\subsubsection{Note}\label{note}}
+
+\begin{itemize}
+\tightlist
+\item
+  Instructions have been included for each segment. You do not have to
+  follow them exactly, but they are included to help you think through
+  the steps.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Dependencies and Setup}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+
+\PY{c+c1}{\PYZsh{} File to Load (Remember to Change These)}
+\PY{n}{file\PYZus{}to\PYZus{}load} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Resources/purchase\PYZus{}data.csv}\PY{l+s+s2}{\PYZdq{}}
+
+\PY{c+c1}{\PYZsh{} Read Purchasing File and store into Pandas data frame}
+\PY{n}{purchase\PYZus{}data} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{n}{file\PYZus{}to\PYZus{}load}\PY{p}{)}
+
+\PY{n}{purchase\PYZus{}data}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     Purchase ID             SN  Age  Gender  Item ID  \textbackslash{}
+0              0        Lisim78   20    Male      108
+1              1    Lisovynya38   40    Male      143
+2              2     Ithergue48   24    Male       92
+3              3  Chamassasya86   24    Male      100
+4              4      Iskosia90   23    Male      131
+..           {\ldots}            {\ldots}  {\ldots}     {\ldots}      {\ldots}
+775          775     Aethedru70   21  Female       60
+776          776         Iral74   21    Male      164
+777          777     Yathecal72   20    Male       67
+778          778        Sisur91    7    Male       92
+779          779      Ennrian78   24    Male       50
+
+                                     Item Name  Price
+0    Extraction, Quickblade Of Trembling Hands   3.53
+1                            Frenzied Scimitar   1.56
+2                                 Final Critic   4.88
+3                                  Blindscythe   3.27
+4                                         Fury   1.44
+..                                         {\ldots}    {\ldots}
+775                                       Wolf   3.54
+776                           Exiled Doomblade   1.63
+777      Celeste, Incarnation of the Corrupted   3.46
+778                               Final Critic   4.19
+779                                       Dawn   4.60
+
+[780 rows x 7 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{player-count}{%
+\subsection{Player Count}\label{player-count}}
+
+    \begin{itemize}
+\tightlist
+\item
+  Display the total number of players
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{104}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{totalplayers} \PY{o}{=} \PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{SN}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{nunique}\PY{p}{(}\PY{p}{)}
+\PY{n}{totalplayers}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{104}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+576
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{purchase\PYZus{}data}\PY{o}{.}\PY{n}{describe}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+       Purchase ID         Age     Item ID       Price
+count   780.000000  780.000000  780.000000  780.000000
+mean    389.500000   22.714103   91.755128    3.050987
+std     225.310896    6.659444   52.697702    1.169549
+min       0.000000    7.000000    0.000000    1.000000
+25\%     194.750000   20.000000   47.750000    1.980000
+50\%     389.500000   22.000000   92.000000    3.150000
+75\%     584.250000   25.000000  138.000000    4.080000
+max     779.000000   45.000000  183.000000    4.990000
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{purchasing-analysis-total}{%
+\subsection{Purchasing Analysis
+(Total)}\label{purchasing-analysis-total}}
+
+    \begin{itemize}
+\item
+  Run basic calculations to obtain number of unique items, average
+  price, etc.
+\item
+  Create a summary data frame to hold the results
+\item
+  Optional: give the displayed data cleaner formatting
+\item
+  Display the summary data frame
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{unique} \PY{o}{=} \PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Item ID}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{nunique}\PY{p}{(}\PY{p}{)}
+\PY{n}{unique}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+179
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{average} \PY{o}{=} \PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+\PY{n}{average}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+3.050987179487176
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{number\PYZus{}purchases} \PY{o}{=} \PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Purchase ID}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{count}\PY{p}{(}\PY{p}{)}
+\PY{n}{number\PYZus{}purchases}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+780
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{total\PYZus{}revenue} \PY{o}{=} \PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\PY{n}{total\PYZus{}revenue}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+2379.77
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{summary\PYZus{}df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of Unique Items}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}\PY{l+m+mi}{179}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Average Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}\PY{l+m+mf}{3.05}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of Purchases}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}\PY{l+m+mi}{780}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total Revenue}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{p}{[}\PY{l+m+mf}{2379.77}\PY{p}{]}\PY{p}{,}
+\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{summary\PYZus{}df}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{26}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   Number of Unique Items  Average Price  Number of Purchases  Total Revenue
+0                     179           3.05                  780        2379.77
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{gender-demographics}{%
+\subsection{Gender Demographics}\label{gender-demographics}}
+
+    \begin{itemize}
+\item
+  Percentage and Count of Male Players
+\item
+  Percentage and Count of Female Players
+\item
+  Percentage and Count of Other / Non-Disclosed
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{37}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Male}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Female}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+652
+113
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{97}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{percentmale} \PY{o}{=} \PY{p}{(}\PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Male}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{o}{/}\PY{l+m+mi}{780} \PY{o}{*}\PY{l+m+mi}{100}
+\PY{n}{percentfemale} \PY{o}{=} \PY{p}{(}\PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Female}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)} \PY{o}{/}\PY{l+m+mi}{780} \PY{o}{*}\PY{l+m+mi}{100}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{percentmale}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{percentfemale}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+83.58974358974359
+14.487179487179489
+    \end{Verbatim}
+
+    \hypertarget{purchasing-analysis-gender}{%
+\subsection{Purchasing Analysis
+(Gender)}\label{purchasing-analysis-gender}}
+
+    \begin{itemize}
+\item
+  Run basic calculations to obtain purchase count, avg. purchase price,
+  avg. purchase total per person etc. by gender
+\item
+  Create a summary data frame to hold the results
+\item
+  Optional: give the displayed data cleaner formatting
+\item
+  Display the summary data frame
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{98}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{genderanalysis} \PY{o}{=} \PY{n}{purchase\PYZus{}data}\PY{o}{.}\PY{n}{groupby}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Gender}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{genderanalysis}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{98}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     Purchase ID             SN  Age                 Gender  Item ID  \textbackslash{}
+0              0        Lisim78   20                   Male      108
+1              1    Lisovynya38   40                   Male      143
+2              2     Ithergue48   24                   Male       92
+3              3  Chamassasya86   24                   Male      100
+4              4      Iskosia90   23                   Male      131
+9              9    Chanosian48   35  Other / Non-Disclosed      136
+15            15      Lisassa64   21                 Female       98
+18            18      Reunasu60   22                 Female       82
+22            22   Siarithria38   38  Other / Non-Disclosed       24
+38            38       Reulae52   10                 Female      116
+41            41      Assosia88   20                 Female        7
+55            55      Phaelap26   25                 Female       84
+82            82     Haerithp41   16  Other / Non-Disclosed      160
+111          111       Sundim98   21  Other / Non-Disclosed       41
+228          228    Jiskirran77   20  Other / Non-Disclosed       80
+
+                                     Item Name  Price Age Ranges
+0    Extraction, Quickblade Of Trembling Hands   3.53      20-24
+1                            Frenzied Scimitar   1.56        40+
+2                                 Final Critic   4.88      20-24
+3                                  Blindscythe   3.27      20-24
+4                                         Fury   1.44      20-24
+9                 Ghastly Adamantite Protector   3.58      35-39
+15                 Deadline, Voice Of Subtlety   2.89      20-24
+18                                     Nirvana   4.90      20-24
+22                               Warped Fetish   3.81      35-39
+38                     Renewed Skeletal Katana   4.18      10-14
+41                Thorn, Satchel of Dark Souls   1.33      20-24
+55                                  Arcane Gem   3.79      25-29
+82                                  Azurewrath   4.40      15-19
+111                                      Orbit   4.75      20-24
+228                                  Dreamsong   3.39      20-24
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{age-demographics}{%
+\subsection{Age Demographics}\label{age-demographics}}
+
+    \begin{itemize}
+\item
+  Establish bins for ages
+\item
+  Categorize the existing players using the age bins. Hint: use pd.cut()
+\item
+  Calculate the numbers and percentages by age group
+\item
+  Create a summary data frame to hold the results
+\item
+  Optional: round the percentage column to two decimal points
+\item
+  Display Age Demographics Table
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{108}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{age\PYZus{}bins} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mf}{9.90}\PY{p}{,} \PY{l+m+mf}{14.90}\PY{p}{,} \PY{l+m+mf}{19.90}\PY{p}{,} \PY{l+m+mf}{24.90}\PY{p}{,} \PY{l+m+mf}{29.90}\PY{p}{,} \PY{l+m+mf}{34.90}\PY{p}{,} \PY{l+m+mf}{39.90}\PY{p}{,} \PY{l+m+mi}{99999}\PY{p}{]}
+\PY{n}{group\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}10}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{10\PYZhy{}14}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{15\PYZhy{}19}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{20\PYZhy{}24}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{25\PYZhy{}29}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{30\PYZhy{}34}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{35\PYZhy{}39}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{40+}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+
+\PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Age Ranges}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{cut}\PY{p}{(}\PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Age}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{age\PYZus{}bins}\PY{p}{,} \PY{n}{labels}\PY{o}{=}\PY{n}{group\PYZus{}names}\PY{p}{)}
+
+\PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Age Ranges}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+
+\PY{n}{count} \PY{o}{=} \PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Age Ranges}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
+
+
+\PY{n}{percentage} \PY{o}{=} \PY{n}{count}\PY{o}{/}\PY{n}{totalplayers} \PY{o}{*}\PY{l+m+mi}{100} 
+\PY{n}{percentage}
+
+\PY{n}{age\PYZus{}df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{\PYZob{}}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Number of Players}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{count}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Percentage}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{percentage}
+\PY{p}{\PYZcb{}}\PY{p}{)}
+
+\PY{n}{age\PYZus{}df}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{108}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+       Number of Players  Percentage
+20-24                365   63.368056
+15-19                136   23.611111
+25-29                101   17.534722
+30-34                 73   12.673611
+35-39                 41    7.118056
+10-14                 28    4.861111
+<10                   23    3.993056
+40+                   13    2.256944
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{purchasing-analysis-age}{%
+\subsection{Purchasing Analysis (Age)}\label{purchasing-analysis-age}}
+
+    \begin{itemize}
+\item
+  Bin the purchase\_data data frame by age
+\item
+  Run basic calculations to obtain purchase count, avg. purchase price,
+  avg. purchase total per person etc. in the table below
+\item
+  Create a summary data frame to hold the results
+\item
+  Optional: give the displayed data cleaner formatting
+\item
+  Display the summary data frame
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{124}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{age\PYZus{}bins} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mf}{9.90}\PY{p}{,} \PY{l+m+mf}{14.90}\PY{p}{,} \PY{l+m+mf}{19.90}\PY{p}{,} \PY{l+m+mf}{24.90}\PY{p}{,} \PY{l+m+mf}{29.90}\PY{p}{,} \PY{l+m+mf}{34.90}\PY{p}{,} \PY{l+m+mf}{39.90}\PY{p}{,} \PY{l+m+mi}{99999}\PY{p}{]}
+\PY{n}{group\PYZus{}names} \PY{o}{=} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}10}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{10\PYZhy{}14}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{15\PYZhy{}19}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{20\PYZhy{}24}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{25\PYZhy{}29}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{30\PYZhy{}34}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{35\PYZhy{}39}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{40+}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+
+\PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Age Ranges}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{cut}\PY{p}{(}\PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Age}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{age\PYZus{}bins}\PY{p}{,} \PY{n}{labels}\PY{o}{=}\PY{n}{group\PYZus{}names}\PY{p}{)}
+
+\PY{n}{purchasecount} \PY{o}{=} \PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Age Ranges}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{valuecount}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{purchasecount}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}, frame=single, framerule=2mm, rulecolor=\color{outerrorbackground}]
+\textcolor{ansi-red-intense}{\textbf{---------------------------------------------------------------------------}}
+\textcolor{ansi-red-intense}{\textbf{AttributeError}}                            Traceback (most recent call last)
+\textcolor{ansi-green-intense}{\textbf{<ipython-input-124-e0960196ecbe>}} in \textcolor{ansi-cyan}{<module>}
+\textcolor{ansi-green}{      4} purchase\_data\textcolor{ansi-yellow-intense}{\textbf{[}}\textcolor{ansi-blue-intense}{\textbf{"Age Ranges"}}\textcolor{ansi-yellow-intense}{\textbf{]}} \textcolor{ansi-yellow-intense}{\textbf{=}} pd\textcolor{ansi-yellow-intense}{\textbf{.}}cut\textcolor{ansi-yellow-intense}{\textbf{(}}purchase\_data\textcolor{ansi-yellow-intense}{\textbf{[}}\textcolor{ansi-blue-intense}{\textbf{"Age"}}\textcolor{ansi-yellow-intense}{\textbf{]}}\textcolor{ansi-yellow-intense}{\textbf{,}} age\_bins\textcolor{ansi-yellow-intense}{\textbf{,}} labels\textcolor{ansi-yellow-intense}{\textbf{=}}group\_names\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{      5} 
+\textcolor{ansi-green-intense}{\textbf{----> 6}}\textcolor{ansi-yellow-intense}{\textbf{ }}purchasecount \textcolor{ansi-yellow-intense}{\textbf{=}} purchase\_data\textcolor{ansi-yellow-intense}{\textbf{[}}\textcolor{ansi-blue-intense}{\textbf{"Age Ranges"}}\textcolor{ansi-yellow-intense}{\textbf{]}}\textcolor{ansi-yellow-intense}{\textbf{.}}valuecount\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{      7} 
+\textcolor{ansi-green}{      8} purchasecount
+
+\textcolor{ansi-green-intense}{\textbf{\textasciitilde{}\textbackslash{}anaconda3\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}pandas\textbackslash{}core\textbackslash{}generic.py}} in \textcolor{ansi-cyan}{\_\_getattr\_\_}\textcolor{ansi-blue-intense}{\textbf{(self, name)}}
+\textcolor{ansi-green}{   5137}             \textcolor{ansi-green-intense}{\textbf{if}} self\textcolor{ansi-yellow-intense}{\textbf{.}}\_info\_axis\textcolor{ansi-yellow-intense}{\textbf{.}}\_can\_hold\_identifiers\_and\_holds\_name\textcolor{ansi-yellow-intense}{\textbf{(}}name\textcolor{ansi-yellow-intense}{\textbf{)}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+\textcolor{ansi-green}{   5138}                 \textcolor{ansi-green-intense}{\textbf{return}} self\textcolor{ansi-yellow-intense}{\textbf{[}}name\textcolor{ansi-yellow-intense}{\textbf{]}}
+\textcolor{ansi-green-intense}{\textbf{-> 5139}}\textcolor{ansi-yellow-intense}{\textbf{             }}\textcolor{ansi-green-intense}{\textbf{return}} object\textcolor{ansi-yellow-intense}{\textbf{.}}\_\_getattribute\_\_\textcolor{ansi-yellow-intense}{\textbf{(}}self\textcolor{ansi-yellow-intense}{\textbf{,}} name\textcolor{ansi-yellow-intense}{\textbf{)}}
+\textcolor{ansi-green}{   5140} 
+\textcolor{ansi-green}{   5141}     \textcolor{ansi-green-intense}{\textbf{def}} \_\_setattr\_\_\textcolor{ansi-yellow-intense}{\textbf{(}}self\textcolor{ansi-yellow-intense}{\textbf{,}} name\textcolor{ansi-yellow-intense}{\textbf{:}} str\textcolor{ansi-yellow-intense}{\textbf{,}} value\textcolor{ansi-yellow-intense}{\textbf{)}} \textcolor{ansi-yellow-intense}{\textbf{->}} \textcolor{ansi-green-intense}{\textbf{None}}\textcolor{ansi-yellow-intense}{\textbf{:}}
+
+\textcolor{ansi-red-intense}{\textbf{AttributeError}}: 'Series' object has no attribute 'valuecount'
+    \end{Verbatim}
+
+    \hypertarget{top-spenders}{%
+\subsection{Top Spenders}\label{top-spenders}}
+
+    \begin{itemize}
+\item
+  Run basic calculations to obtain the results in the table below
+\item
+  Create a summary data frame to hold the results
+\item
+  Sort the total purchase value column in descending order
+\item
+  Optional: give the displayed data cleaner formatting
+\item
+  Display a preview of the summary data frame
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{125}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{topspenders\PYZus{}df} \PY{o}{=} \PY{n}{purchase\PYZus{}data}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\PY{n}{topspenders\PYZus{}df}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{125}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+     Purchase ID             SN  Age  Gender  Item ID  \textbackslash{}
+554          554       Dyally87   22    Male       63
+189          189       Hiasri33   23    Male       63
+110          110        Ririp86   25    Male      139
+246          246     Lirtilsa71   24    Male      139
+493          493  Chanirrasta87   14    Male      139
+..           {\ldots}            {\ldots}  {\ldots}     {\ldots}      {\ldots}
+586          586     Chanirra79   23  Female      155
+282          282        Aidai61   21    Male      155
+371          371     Eusurdeu49   23    Male      155
+63            63          Alo38   20    Male      125
+418          418        Marim28   25  Female      125
+
+                      Item Name  Price Age Ranges
+554              Stormfury Mace   4.99      20-24
+189              Stormfury Mace   4.99      20-24
+110     Mercy, Katana of Dismay   4.94      25-29
+246     Mercy, Katana of Dismay   4.94      20-24
+493     Mercy, Katana of Dismay   4.94      10-14
+..                          {\ldots}    {\ldots}        {\ldots}
+586   War-Forged Gold Deflector   1.01      20-24
+282   War-Forged Gold Deflector   1.01      20-24
+371   War-Forged Gold Deflector   1.01      20-24
+63   Whistling Mithril Warblade   1.00      20-24
+418  Whistling Mithril Warblade   1.00      25-29
+
+[780 rows x 8 columns]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \hypertarget{most-popular-items}{%
+\subsection{Most Popular Items}\label{most-popular-items}}
+
+    \begin{itemize}
+\item
+  Retrieve the Item ID, Item Name, and Item Price columns
+\item
+  Group by Item ID and Item Name. Perform calculations to obtain
+  purchase count, average item price, and total purchase value
+\item
+  Create a summary data frame to hold the results
+\item
+  Sort the purchase count column in descending order
+\item
+  Optional: give the displayed data cleaner formatting
+\item
+  Display a preview of the summary data frame
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{126}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{purchase\PYZus{}data}\PY{o}{.}\PY{n}{columns}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{126}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+Index(['Purchase ID', 'SN', 'Age', 'Gender', 'Item ID', 'Item Name', 'Price',
+       'Age Ranges'],
+      dtype='object')
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{127}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{purchase\PYZus{}data}\PY{o}{.}\PY{n}{groupby}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Item ID}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Item Name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}, frame=single, framerule=2mm, rulecolor=\color{outerrorbackground}]
+\textcolor{ansi-red-intense}{\textbf{---------------------------------------------------------------------------}}
+\textcolor{ansi-red-intense}{\textbf{TypeError}}                                 Traceback (most recent call last)
+\textcolor{ansi-green-intense}{\textbf{<ipython-input-127-99e799b24892>}} in \textcolor{ansi-cyan}{<module>}
+\textcolor{ansi-green-intense}{\textbf{----> 1}}\textcolor{ansi-yellow-intense}{\textbf{ }}purchase\_data\textcolor{ansi-yellow-intense}{\textbf{.}}groupby\textcolor{ansi-yellow-intense}{\textbf{[}}\textcolor{ansi-blue-intense}{\textbf{"Item ID"}}\textcolor{ansi-yellow-intense}{\textbf{,}} \textcolor{ansi-blue-intense}{\textbf{"Item Name"}}\textcolor{ansi-yellow-intense}{\textbf{]}}
+
+\textcolor{ansi-red-intense}{\textbf{TypeError}}: 'method' object is not subscriptable
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{85}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{popular\PYZus{}df} \PY{o}{=} \PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Item ID}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Item Name}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{]}
+\PY{n}{popular\PYZus{}df}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{85}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+   Item ID                                  Item Name  Price
+0      108  Extraction, Quickblade Of Trembling Hands   3.53
+1      143                          Frenzied Scimitar   1.56
+2       92                               Final Critic   4.88
+3      100                                Blindscythe   3.27
+4      131                                       Fury   1.44
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{90}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{averageprice} \PY{o}{=} \PY{n}{purchase\PYZus{}data}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Price}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}
+\PY{n}{averageprice}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{90}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+3.050987179487176
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+                                                     Purchase Count  \textbackslash{}
+Item ID Item Name
+92      Final Critic                                             13
+178     Oathbreaker, Last Hope of the Breaking Storm             12
+145     Fiery Glass Crusader                                      9
+132     Persuasion                                                9
+108     Extraction, Quickblade Of Trembling Hands                 9
+
+                                                     Item Price  \textbackslash{}
+Item ID Item Name
+92      Final Critic                                      \$4.61
+178     Oathbreaker, Last Hope of the Breaking Storm      \$4.23
+145     Fiery Glass Crusader                              \$4.58
+132     Persuasion                                        \$3.22
+108     Extraction, Quickblade Of Trembling Hands         \$3.53
+
+                                                     Total Purchase Value
+Item ID Item Name
+92      Final Critic                                               \$59.99
+178     Oathbreaker, Last Hope of the Breaking Storm               \$50.76
+145     Fiery Glass Crusader                                       \$41.22
+132     Persuasion                                                 \$28.99
+108     Extraction, Quickblade Of Trembling Hands                  \$31.77
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{most-profitable-items}{%
+\subsection{Most Profitable Items}\label{most-profitable-items}}
+
+    \begin{itemize}
+\item
+  Sort the above table by total purchase value in descending order
+\item
+  Optional: give the displayed data cleaner formatting
+\item
+  Display a preview of the data frame
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{128}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{profitable\PYZus{}df} \PY{o}{=} \PY{n}{abovetable}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total Purchase Value}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}, frame=single, framerule=2mm, rulecolor=\color{outerrorbackground}]
+\textcolor{ansi-red-intense}{\textbf{---------------------------------------------------------------------------}}
+\textcolor{ansi-red-intense}{\textbf{NameError}}                                 Traceback (most recent call last)
+\textcolor{ansi-green-intense}{\textbf{<ipython-input-128-57cd92ffac40>}} in \textcolor{ansi-cyan}{<module>}
+\textcolor{ansi-green-intense}{\textbf{----> 1}}\textcolor{ansi-yellow-intense}{\textbf{ }}profitable\_df \textcolor{ansi-yellow-intense}{\textbf{=}} abovetable\textcolor{ansi-yellow-intense}{\textbf{.}}sort\_values\textcolor{ansi-yellow-intense}{\textbf{(}}\textcolor{ansi-blue-intense}{\textbf{"Total Purchase Value"}}\textcolor{ansi-yellow-intense}{\textbf{,}} ascending\textcolor{ansi-yellow-intense}{\textbf{=}}\textcolor{ansi-green-intense}{\textbf{False}}\textcolor{ansi-yellow-intense}{\textbf{)}}
+
+\textcolor{ansi-red-intense}{\textbf{NameError}}: name 'abovetable' is not defined
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
